@@ -5,12 +5,15 @@ type OTPResponse = {
   status: string;
   phoneNumber: string;
   tokenId: string;
+  expiresIn: number;
   verified?: boolean;
 };
 type OTPError = {
   status: string;
   message: unknown;
 };
+
+export const OTP_DURATION_MINUTES = 5;
 
 export async function sendOTP(
   phone: string,
@@ -20,7 +23,11 @@ export async function sendOTP(
     if (!phone || !country) {
       throw new Error("Phone number and country are required");
     }
-    const response = await sendWithTermii(phone);
+    const response = await sendWithTermii(
+      phone,
+      undefined,
+      OTP_DURATION_MINUTES,
+    );
 
     if (response.smsStatus !== "Message Sent") {
       throw new Error("Failed to send OTP");
@@ -30,6 +37,7 @@ export async function sendOTP(
       status: response.smsStatus,
       phoneNumber: response.to,
       tokenId: response.pinId,
+      expiresIn: OTP_DURATION_MINUTES * 60,
     };
   } catch (error: any) {
     return {

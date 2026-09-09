@@ -51,10 +51,68 @@ const router = Router();
  *                       description: Token ID to use when verifying the OTP
  *                     phoneNumber:
  *                       type: string
+ *                     expiresIn:
+ *                       type: number
+ *                       description: OTP validity in seconds
  *       400:
  *         description: Bad request
  */
 router.post("/send", OtpController.sendOtp);
+
+/**
+ * @swagger
+ * /otp/resend:
+ *   post:
+ *     tags:
+ *       - OTP
+ *     summary: Resend OTP to a phone number
+ *     description: Sends a fresh 6-digit OTP via SMS to the provided phone number using Termii.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *               - country
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: International format phone number (e.g. +2348012345678)
+ *                 example: "+2348012345678"
+ *               country:
+ *                 type: string
+ *                 description: ISO country code (e.g. NG)
+ *                 example: "NG"
+ *     responses:
+ *       200:
+ *         description: OTP resent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: ok
+ *                 message:
+ *                   type: string
+ *                   example: OTP resent successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     tokenId:
+ *                       type: string
+ *                     phoneNumber:
+ *                       type: string
+ *                     expiresIn:
+ *                       type: number
+ *                       description: OTP validity in seconds
+ *       400:
+ *         description: Bad request
+ */
+router.post("/resend", OtpController.resendOtp);
 
 /**
  * @swagger

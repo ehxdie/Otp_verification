@@ -11,6 +11,7 @@ export type SendOtpResponse = {
   data?: {
     tokenId: string
     phoneNumber: string
+    expiresIn: number
   }
 }
 
@@ -46,6 +47,10 @@ async function request<T>(path: string, body: object): Promise<T> {
 
 export function sendOtp(payload: SendOtpPayload): Promise<SendOtpResponse> {
   return request<SendOtpResponse>('/otp/send', payload)
+}
+
+export function resendOtp(payload: SendOtpPayload): Promise<SendOtpResponse> {
+  return request<SendOtpResponse>('/otp/resend', payload)
 }
 
 export function verifyOtp(payload: VerifyOtpPayload): Promise<VerifyOtpResponse> {
