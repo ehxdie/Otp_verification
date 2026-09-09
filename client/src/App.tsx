@@ -1,121 +1,85 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import PhoneStep from './components/PhoneStep'
+import OtpStep from './components/OtpStep'
+import VerifiedStep from './components/VerifiedStep'
 import './App.css'
 
+export type AppStep = 'phone' | 'otp' | 'verified'
+
+export type OtpSession = {
+  tokenId: string
+  phoneNumber: string
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [step, setStep] = useState<AppStep>('phone')
+  const [session, setSession] = useState<OtpSession | null>(null)
+  const [verifiedPhone, setVerifiedPhone] = useState<string>('')
+
+  const handleOtpSent = (data: OtpSession) => {
+    setSession(data)
+    setStep('otp')
+  }
+
+  const handleVerified = (phone: string) => {
+    setVerifiedPhone(phone)
+    setStep('verified')
+  }
+
+  const handleReset = () => {
+    setSession(null)
+    setVerifiedPhone('')
+    setStep('phone')
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-wrapper">
+      {/* Background orbs */}
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
+      <div className="orb orb-3" />
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <div className="card-container">
+        {/* Logo / Brand */}
+        <div className="brand">
+          <div className="brand-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <span className="brand-name">Verify</span>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        {/* Step indicator */}
+        <div className="steps-indicator">
+          <div className={`step-dot ${step === 'phone' ? 'active' : step !== 'phone' ? 'done' : ''}`} />
+          <div className={`step-line ${step === 'otp' || step === 'verified' ? 'filled' : ''}`} />
+          <div className={`step-dot ${step === 'otp' ? 'active' : step === 'verified' ? 'done' : ''}`} />
+          <div className={`step-line ${step === 'verified' ? 'filled' : ''}`} />
+          <div className={`step-dot ${step === 'verified' ? 'active' : ''}`} />
+        </div>
+
+        {/* Step content */}
+        <div className="step-content">
+          {step === 'phone' && (
+            <PhoneStep onSuccess={handleOtpSent} />
+          )}
+          {step === 'otp' && session && (
+            <OtpStep
+              session={session}
+              onSuccess={handleVerified}
+              onBack={() => setStep('phone')}
+            />
+          )}
+          {step === 'verified' && (
+            <VerifiedStep phone={verifiedPhone} onReset={handleReset} />
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
 

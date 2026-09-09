@@ -31,10 +31,11 @@ export async function sendOTP(
       phoneNumber: response.to,
       tokenId: response.pinId,
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       status: "error",
-      message: error,
+      message:
+        error?.response?.data?.message || error.message || "Unknown error",
     };
   }
 }
@@ -46,31 +47,30 @@ export async function verifyOTP(token: string, sentOTP: string) {
     }
     const response = await verifyWithTermii(token, sentOTP);
 
-    if (!response.verified) {
+    if (response.verified !== "True") {
       if (response.code === 400) {
         throw new BadRequestError(response.message || "Failed to verify OTP");
       }
-      throw new Error(response.message);
+      throw new Error(response.message || "OTP verification failed");
     }
 
     return {
-      status: response.verified ? "verified" : "not verified",
+      status: "verified",
       tokenId: response.pinId,
       phoneNumber: response.msisdn,
-      verified: response.verified,
+      verified: true,
     };
   } catch (error: any) {
-    console.log(error);
-    if (error?.code) {
+    if (error?.httpCode) {
       return {
         status: "error",
         message: error.message,
-        code: error.code,
+        code: error.httpCode,
       };
     }
     return {
       status: "error",
-      message: error,
+      message: error?.message || "Verification failed",
     };
   }
 }
