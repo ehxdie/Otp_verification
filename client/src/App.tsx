@@ -9,6 +9,8 @@ export type AppStep = 'phone' | 'otp' | 'verified'
 export type OtpSession = {
   tokenId: string
   phoneNumber: string
+  country: string
+  expiresIn: number
 }
 
 function App() {
@@ -24,6 +26,10 @@ function App() {
   const handleVerified = (phone: string) => {
     setVerifiedPhone(phone)
     setStep('verified')
+  }
+
+  const handleTokenChange = (tokenId: string) => {
+    setSession((s) => (s ? { ...s, tokenId } : s))
   }
 
   const handleReset = () => {
@@ -55,7 +61,7 @@ function App() {
 
         {/* Step indicator */}
         <div className="steps-indicator">
-          <div className={`step-dot ${step === 'phone' ? 'active' : step !== 'phone' ? 'done' : ''}`} />
+          <div className={`step-dot ${step === 'phone' ? 'active' : 'done'}`} />
           <div className={`step-line ${step === 'otp' || step === 'verified' ? 'filled' : ''}`} />
           <div className={`step-dot ${step === 'otp' ? 'active' : step === 'verified' ? 'done' : ''}`} />
           <div className={`step-line ${step === 'verified' ? 'filled' : ''}`} />
@@ -69,7 +75,9 @@ function App() {
           )}
           {step === 'otp' && session && (
             <OtpStep
+              key={session.tokenId}
               session={session}
+              onTokenChange={handleTokenChange}
               onSuccess={handleVerified}
               onBack={() => setStep('phone')}
             />

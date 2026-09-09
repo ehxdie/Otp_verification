@@ -40,6 +40,8 @@ export default function PhoneStep({ onSuccess }: Props) {
         onSuccess({
           tokenId: res.data.tokenId,
           phoneNumber: res.data.phoneNumber,
+          country: selectedCountry.code,
+          expiresIn: res.data.expiresIn,
         })
       } else {
         setError(res.message || 'Failed to send OTP. Please try again.')

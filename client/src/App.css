@@ -459,6 +459,82 @@ body {
   75%      { transform: translateX(6px); }
 }
 
+/* ── OTP Expiry Indicator ───────────────────────────────────────────── */
+.otp-expiry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: fit-content;
+  margin: 0 auto 12px;
+  padding: 8px 16px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 100px;
+  color: var(--emerald);
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+.otp-expiry strong {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.otp-expiry.expiring {
+  background: rgba(244, 63, 94, 0.1);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: #fb7185;
+}
+.expiry-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Resend Row ─────────────────────────────────────────────────────── */
+.resend-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+}
+.resend-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.resend-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  border-radius: var(--radius-btn);
+  color: var(--violet-light);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.resend-btn:hover:not(:disabled) {
+  background: rgba(124, 58, 237, 0.2);
+  box-shadow: 0 0 0 2px var(--violet-glow);
+  transform: translateY(-1px);
+}
+.resend-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  color: var(--text-secondary);
+  border-color: var(--border);
+  background: transparent;
+}
+.spinner-dark {
+  border-color: rgba(124, 58, 237, 0.3);
+  border-top-color: var(--violet-light);
+}
+
 /* ── Verified Step ──────────────────────────────────────────────────── */
 .verified-panel {
   align-items: center;
