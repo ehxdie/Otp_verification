@@ -28,7 +28,9 @@ const allowedOrigins = [
   "http://127.0.0.1:5174",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-];
+  "https://otp-verification-smoky.vercel.app",
+  process.env.CLIENT_URL,
+].filter((origin): origin is string => Boolean(origin));
 
 app.use(
   cors({
@@ -36,7 +38,11 @@ app.use(
       // allow requests with no origin (curl, Postman, etc.)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
+      const isAllowedOrigin =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/.*\.vercel\.app$/.test(origin);
+
+      if (isAllowedOrigin) {
         return callback(null, true);
       } else {
         return callback(new Error("Not allowed by CORS"));
