@@ -1,46 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 /* ── Reset & Base ───────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
-  --font: 'Inter', system-ui, sans-serif;
+  --font: "Inter", system-ui, sans-serif;
 
   /* Brand palette */
-  --violet:      #7c3aed;
-  --violet-mid:  #8b5cf6;
-  --violet-light:#a78bfa;
+  --violet: #7c3aed;
+  --violet-mid: #8b5cf6;
+  --violet-light: #a78bfa;
   --violet-glow: rgba(124, 58, 237, 0.35);
-  --indigo:      #4f46e5;
-  --rose:        #f43f5e;
-  --emerald:     #10b981;
-  --amber:       #f59e0b;
+  --indigo: #4f46e5;
+  --rose: #f43f5e;
+  --emerald: #10b981;
+  --amber: #f59e0b;
 
   /* Surfaces */
-  --bg:          #0a0a0f;
-  --surface:     rgba(18, 18, 28, 0.85);
-  --surface-2:   rgba(30, 30, 46, 0.7);
-  --border:      rgba(255, 255, 255, 0.08);
-  --border-focus:rgba(124, 58, 237, 0.6);
+  --bg: #0a0a0f;
+  --surface: rgba(18, 18, 28, 0.85);
+  --surface-2: rgba(30, 30, 46, 0.7);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(124, 58, 237, 0.6);
 
   /* Text */
-  --text-primary:   #f0eeff;
+  --text-primary: #f0eeff;
   --text-secondary: #9b95b5;
-  --text-muted:     #5c5678;
+  --text-muted: #5c5678;
 
   /* Effects */
-  --shadow-card:  0 32px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
-  --shadow-btn:   0 4px 20px var(--violet-glow);
+  --shadow-card:
+    0 32px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-btn: 0 4px 20px var(--violet-glow);
   --shadow-input: 0 0 0 2px var(--border-focus);
 
-  --radius-card:  24px;
+  --radius-card: 24px;
   --radius-input: 14px;
-  --radius-btn:   14px;
+  --radius-btn: 14px;
 
   --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   min-height: 100dvh;
 }
@@ -51,6 +60,7 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 /* ── Layout ─────────────────────────────────────────────────────────── */
@@ -64,6 +74,13 @@ body {
   overflow: hidden;
 }
 
+@media (max-width: 640px) {
+  .app-wrapper {
+    padding: 16px 12px;
+    align-items: stretch;
+  }
+}
+
 /* Ambient orbs */
 .orb {
   position: fixed;
@@ -74,35 +91,57 @@ body {
   animation: orbFloat 8s ease-in-out infinite alternate;
 }
 .orb-1 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(124,58,237,0.22) 0%, transparent 70%);
-  top: -120px; left: -120px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.22) 0%,
+    transparent 70%
+  );
+  top: -120px;
+  left: -120px;
   animation-delay: 0s;
 }
 .orb-2 {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(79,70,229,0.18) 0%, transparent 70%);
-  bottom: -80px; right: -80px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(79, 70, 229, 0.18) 0%,
+    transparent 70%
+  );
+  bottom: -80px;
+  right: -80px;
   animation-delay: -3s;
 }
 .orb-3 {
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(244,63,94,0.1) 0%, transparent 70%);
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    rgba(244, 63, 94, 0.1) 0%,
+    transparent 70%
+  );
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   animation-delay: -6s;
 }
 
 @keyframes orbFloat {
-  from { transform: scale(1) translate(0, 0); }
-  to   { transform: scale(1.1) translate(20px, -20px); }
+  from {
+    transform: scale(1) translate(0, 0);
+  }
+  to {
+    transform: scale(1.1) translate(20px, -20px);
+  }
 }
 
 /* ── Card ───────────────────────────────────────────────────────────── */
 .card-container {
   position: relative;
   z-index: 1;
-  width: 100%;
+  width: min(100%, 440px);
   max-width: 440px;
   background: var(--surface);
   backdrop-filter: blur(24px);
@@ -118,8 +157,14 @@ body {
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ── Brand ──────────────────────────────────────────────────────────── */
@@ -129,7 +174,8 @@ body {
   gap: 10px;
 }
 .brand-icon {
-  width: 44px; height: 44px;
+  width: 44px;
+  height: 44px;
   background: linear-gradient(135deg, var(--violet), var(--indigo));
   border-radius: 12px;
   display: flex;
@@ -155,7 +201,8 @@ body {
   gap: 0;
 }
 .step-dot {
-  width: 10px; height: 10px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--text-muted);
   border: 2px solid var(--text-muted);
@@ -194,8 +241,14 @@ body {
 }
 
 @keyframes stepIn {
-  from { opacity: 0; transform: translateX(16px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Step Icon */
@@ -203,21 +256,30 @@ body {
   margin-bottom: 4px;
 }
 .step-icon {
-  width: 56px; height: 56px;
+  width: 56px;
+  height: 56px;
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .phone-icon {
-  background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(79,70,229,0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.2),
+    rgba(79, 70, 229, 0.2)
+  );
   color: var(--violet-light);
-  border: 1px solid rgba(124,58,237,0.3);
+  border: 1px solid rgba(124, 58, 237, 0.3);
 }
 .otp-icon {
-  background: linear-gradient(135deg, rgba(79,70,229,0.2), rgba(16,185,129,0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.2),
+    rgba(16, 185, 129, 0.15)
+  );
   color: var(--violet-light);
-  border: 1px solid rgba(79,70,229,0.3);
+  border: 1px solid rgba(79, 70, 229, 0.3);
 }
 
 /* Titles */
@@ -258,6 +320,7 @@ body {
 }
 .field-select {
   width: 100%;
+  min-height: 48px;
   padding: 13px 44px 13px 16px;
   background: var(--surface-2);
   border: 1px solid var(--border);
@@ -301,7 +364,7 @@ body {
 }
 .dial-badge {
   padding: 13px 14px;
-  background: rgba(124,58,237,0.12);
+  background: rgba(124, 58, 237, 0.12);
   border-right: 1px solid var(--border);
   color: var(--violet-light);
   font-size: 14px;
@@ -311,6 +374,7 @@ body {
 }
 .field-input {
   width: 100%;
+  min-height: 48px;
   padding: 13px 16px;
   background: transparent;
   border: none;
@@ -319,19 +383,27 @@ body {
   font-family: var(--font);
   font-size: 15px;
 }
-.field-input::placeholder { color: var(--text-muted); }
+.field-input::placeholder {
+  color: var(--text-muted);
+}
 
 /* ── OTP Boxes ──────────────────────────────────────────────────────── */
-.otp-form { gap: 20px; }
+.otp-form {
+  gap: 20px;
+}
 
 .otp-boxes {
   display: flex;
   justify-content: center;
   gap: 10px;
+  width: 100%;
 }
 
 .otp-box {
-  width: 52px; height: 58px;
+  width: min(12vw, 52px);
+  max-width: 52px;
+  min-width: 42px;
+  height: 58px;
   background: var(--surface-2);
   border: 1.5px solid var(--border);
   border-radius: 14px;
@@ -347,11 +419,13 @@ body {
 }
 .otp-box:focus {
   border-color: var(--violet);
-  box-shadow: 0 0 0 2px var(--violet-glow), 0 4px 16px rgba(124,58,237,0.15);
+  box-shadow:
+    0 0 0 2px var(--violet-glow),
+    0 4px 16px rgba(124, 58, 237, 0.15);
   transform: translateY(-1px);
 }
 .otp-box.filled {
-  background: rgba(124,58,237,0.12);
+  background: rgba(124, 58, 237, 0.12);
   border-color: var(--violet-mid);
   color: var(--violet-light);
 }
@@ -379,14 +453,16 @@ body {
   margin-top: 4px;
 }
 .primary-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent);
   opacity: 0;
   transition: var(--transition);
 }
-.primary-btn:hover:not(:disabled)::before { opacity: 1; }
+.primary-btn:hover:not(:disabled)::before {
+  opacity: 1;
+}
 .primary-btn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 8px 32px var(--violet-glow);
@@ -422,7 +498,7 @@ body {
 }
 .ghost-btn:hover:not(:disabled) {
   color: var(--text-primary);
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 .ghost-btn:disabled {
   opacity: 0.4;
@@ -432,13 +508,18 @@ body {
 /* Spinner */
 .spinner {
   display: inline-block;
-  width: 16px; height: 16px;
-  border: 2px solid rgba(255,255,255,0.3);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ── Error Box ──────────────────────────────────────────────────────── */
 .error-box {
@@ -454,9 +535,16 @@ body {
   animation: errorShake 0.4s ease;
 }
 @keyframes errorShake {
-  0%,100% { transform: translateX(0); }
-  25%      { transform: translateX(-6px); }
-  75%      { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
 }
 
 /* ── OTP Expiry Indicator ───────────────────────────────────────────── */
@@ -548,12 +636,14 @@ body {
 }
 
 .checkmark-ring {
-  width: 90px; height: 90px;
+  width: 90px;
+  height: 90px;
   margin: 0 auto;
 }
 
 .checkmark-svg {
-  width: 90px; height: 90px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
 }
 
@@ -577,10 +667,14 @@ body {
 }
 
 @keyframes strokeCircle {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes strokeCheck {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .verified-title {
@@ -601,32 +695,106 @@ body {
   align-items: center;
   gap: 6px;
   padding: 8px 18px;
-  background: rgba(16,185,129,0.12);
-  border: 1px solid rgba(16,185,129,0.3);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 100px;
   color: var(--emerald);
   font-size: 13px;
   font-weight: 600;
   margin-top: 8px;
-  animation: badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) 1.1s both;
+  animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 1.1s both;
 }
 
 @keyframes badgePop {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ── Responsive ─────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .card-container {
-    padding: 32px 24px;
+    padding: 28px 18px 22px;
     border-radius: 20px;
+    gap: 20px;
   }
-  .step-title { font-size: 22px; }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-name {
+    font-size: 18px;
+  }
+
+  .step-title {
+    font-size: 22px;
+    margin-top: 4px;
+  }
+
+  .step-description {
+    font-size: 13.5px;
+  }
+
+  .field-label {
+    margin-bottom: -4px;
+  }
+
+  .primary-btn,
+  .resend-btn {
+    width: 100%;
+  }
+
   .otp-box {
-    width: 44px; height: 52px;
+    width: min(12vw, 44px);
+    min-width: 36px;
+    height: 52px;
     font-size: 20px;
     border-radius: 12px;
   }
-  .otp-boxes { gap: 7px; }
+
+  .otp-boxes {
+    gap: 7px;
+  }
+
+  .otp-expiry {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .resend-row {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .card-container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .otp-boxes {
+    gap: 5px;
+  }
+
+  .otp-box {
+    min-width: 32px;
+    font-size: 18px;
+  }
+
+  .step-title {
+    font-size: 20px;
+  }
 }
