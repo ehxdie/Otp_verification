@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { sendOTP, verifyOTP } from "../integrations/termii";
+import { sendOTP, verifyOTP } from "../integrations/twillio";
 import { HttpStatusCode } from "../exceptions";
 
 export class OtpController {
@@ -105,12 +105,12 @@ export class OtpController {
    */
   static async verifyOtp(req: Request, res: Response) {
     try {
-      const { tokenId, otp } = req.body;
+      const { phone, tokenId, otp } = req.body;
 
-      if (!tokenId) {
+      if (!phone) {
         return res.status(HttpStatusCode.BAD_REQUEST).json({
           status: "fail",
-          message: "Token ID is required",
+          message: "Phone number is required for Twilio verification",
         });
       }
 
@@ -121,7 +121,7 @@ export class OtpController {
         });
       }
 
-      const result = await verifyOTP(tokenId, otp);
+      const result = await verifyOTP(phone, otp);
 
       if (result.status === "error") {
         return res.status(HttpStatusCode.BAD_REQUEST).json({
