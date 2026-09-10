@@ -1,3 +1,8 @@
+import path from "node:path";
+import dotenv from "dotenv";
+
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
 import express, { NextFunction, urlencoded } from "express";
 import type { Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";

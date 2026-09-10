@@ -1,18 +1,41 @@
+import path from "node:path";
+import dotenv from "dotenv";
 import twilio from "twilio";
 
-const accountSid =
-  process.env.TWILIO_ACCOUNT_SID ||
-  process.env.TWILLIO_SID ||
-  process.env.TWILIO_SID;
+dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
-const authToken = process.env.TWILIO_AUTH_TOKEN || process.env.AUTH_TOKEN;
+export function getTwilioConfig() {
+  const accountSid =
+    process.env.TWILIO_ACCOUNT_SID ||
+    process.env.TWILLIO_SID ||
+    process.env.TWILIO_SID ||
+    "";
 
-const VERIFY_SERVICE_SID =
-  process.env.TWILIO_VERIFY_SERVICE_SID ||
-  process.env.TWILLIO_VERIFY_SERVICE_SID ||
-  "";
+  const authToken =
+    process.env.TWILIO_AUTH_TOKEN ||
+    process.env.AUTH_TOKEN ||
+    process.env.TWILIO_TOKEN ||
+    "";
 
-const client = twilio(accountSid, authToken);
+  const serviceSid =
+    process.env.TWILIO_VERIFY_SERVICE_SID ||
+    process.env.TWILLIO_VERIFY_SERVICE_SID ||
+    process.env.TWILIO_SERVICE_SID ||
+    "";
+
+  if (!accountSid || !authToken) {
+    throw new Error(
+      "Missing Twilio credentials. Set TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN in the server .env file.",
+    );
+  }
+
+  return { accountSid, authToken, serviceSid };
+}
+
+const getClient = () => {
+  const { accountSid, authToken } = getTwilioConfig();
+  return twilio(accountSid, authToken);
+};
 
 type TwilioSendResponse = {
   sid: string;
@@ -30,8 +53,16 @@ type TwilioVerifyResponse = {
 export async function sendWithTwilio(
   phone: string, // must be E.164 format, e.g. +2347085108384
 ): Promise<TwilioSendResponse> {
-  const verification = await client.verify.v2
-    .services(VERIFY_SERVICE_SID)
+  const { serviceSid } = getTwilioConfig();
+
+  if (!serviceSid) {
+    throw new Error(
+      "Missing TWILIO_VERIFY_SERVICE_SID in the server .env file.",
+    );
+  }
+
+  const verification = await getClient()
+    .verify.v2.services(serviceSid)
     .verifications.create({ to: phone, channel: "sms" });
 
   return {
@@ -46,8 +77,16 @@ export async function verifyWithTwilio(
   code: string,
 ): Promise<TwilioVerifyResponse> {
   try {
-    const check = await client.verify.v2
-      .services(VERIFY_SERVICE_SID)
+    const { serviceSid } = getTwilioConfig();
+
+    if (!serviceSid) {
+      throw new Error(
+        "Missing TWILIO_VERIFY_SERVICE_SID in the server .env file.",
+      );
+    }
+
+    const check = await getClient()
+      .verify.v2.services(serviceSid)
       .verificationChecks.create({ to: phone, code });
 
     return {
